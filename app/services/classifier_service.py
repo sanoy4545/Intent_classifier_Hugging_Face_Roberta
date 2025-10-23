@@ -3,13 +3,13 @@ import logging
 from app.core.model import classifier
 from app.core.prompt_builder import build_zero_shot_prompt
 from app.core.rationale import generate_rationale
-from app.core.utils import preprocess_data, format_classification_result
+from app.core.utils import preprocess_data, output_writer
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
 class ClassifierService:
-    def classify_message(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def classify_conversations(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Orchestrate the classification process:
         1. Preprocess the message
@@ -27,27 +27,24 @@ class ClassifierService:
             #prompt = build_zero_shot_prompt(cleaned_data)
 
             # Run classification
-            intent, confidence = classifier.classify(cleaned_data,settings.ALLOWED_INTENTS)
-            
+            results = []
+            for convo in cleaned_data:
+                result = classifier.classify(convo)
+                results.append(result)
+
             # Generate rationale if enabled
-            rationale = generate_rationale(
+            '''rationale = generate_rationale(
                 intent=intent,
                 confidence=confidence,
                 message=cleaned_message,
                 history=cleaned_history
-            ) if settings.ENABLE_RATIONALE else None
+            ) if settings.ENABLE_RATIONALE else None'''
             
             # Format result
-            result = format_classification_result(
-                intent=intent,
-                confidence=confidence,
-                rationale=rationale,
-                message=cleaned_message
-            )
-            
-            logger.info(f"Successfully classified message with intent: {intent}")
-            return result
-            
+            output_writer(results)
+
+            logger.info(f"Successfully classified message with intent")
+
         except Exception as e:
             logger.error(f"Error in classification service: {str(e)}")
             raise

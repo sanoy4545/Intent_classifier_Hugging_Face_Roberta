@@ -91,7 +91,7 @@ class IntentClassifier:
 
 # Global instance
 classifier = IntentClassifier()
-classifier.load_model()
+'''classifier.load_model()
 sample_input = {
     "conversation_id": "conv_001",
     "history": (
@@ -115,4 +115,4 @@ sample_input_2 = {
 
 
 print(classifier.classify(sample_input))  # Example usage
-print(classifier.classify(sample_input_2))  # Example usage
+print(classifier.classify(sample_input_2))  # Example usage'''

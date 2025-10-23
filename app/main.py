@@ -5,7 +5,6 @@ import json
 
 from app.core.model import classifier
 from app.core.utils import setup_logging
-from app.schemas import ClassificationResponse
 from app.services.classifier_service import ClassifierService
 from app.config import settings
 
@@ -44,7 +43,7 @@ async def startup_event():
         raise
 
 
-@app.post("/classify", response_model=ClassificationResponse)
+@app.post("/classify")
 async def classify_intent(file: UploadFile = File(...)):
     """
     Accept a JSON file containing multiple conversations
