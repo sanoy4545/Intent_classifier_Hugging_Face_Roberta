@@ -28,7 +28,7 @@ app.add_middleware(
 setup_logging()
 logger = logging.getLogger(__name__)
 
-# Initialize service
+# Initialize classifier service , single service no need for container
 classifier_service = ClassifierService()
 
 

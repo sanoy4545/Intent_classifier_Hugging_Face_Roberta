@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from app.main import app
+from app.fastapi_app import app
 from app.core.model import classifier
 
 client = TestClient(app)

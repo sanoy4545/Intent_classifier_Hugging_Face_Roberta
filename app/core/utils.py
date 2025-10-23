@@ -1,19 +1,33 @@
-import csv
+import csv,os,json,re,emoji
 import logging
-import os
+from app.config import settings
 from typing import Dict, Any, List
-import json
-from datetime import datetime
-import re
-import emoji
 
 # Configure logging
-def setup_logging() -> None:
-    """Configure logging for the application."""
+def setup_logging(enable_logging: bool = True):
+    """
+    Sets up global logging. 
+    If enable_logging=False, disables all logging across the app.
+    """
+    if not enable_logging:
+        logging.disable(logging.CRITICAL)
+        return
+
+    # Create logs directory if not exists
+    log_dir = os.path.join(os.getcwd(), "logs")
+    os.makedirs(log_dir, exist_ok=True)
+
+    log_file = os.path.join(log_dir, "app.log")
+
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.FileHandler(log_file, mode="w", encoding="utf-8"),
+            logging.StreamHandler()
+        ]
     )
+    logging.info(f"Logging initialized. Logs are being saved to: {log_file}")
 
 def clean_text(text: str) -> str:
     """
@@ -50,7 +64,7 @@ def format_conversation(messages: List[Dict[str, Any]]) -> str:
     return "\n".join(lines[:-1]),lines[-1]  # Return full conversation text
 
 
-def preprocess_data(data: List[Dict[str, Any]], max_messages: int = 5) -> List[Dict[str, Any]]:
+def preprocess_data(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Preprocess the entire dataset of conversations.
     
@@ -62,10 +76,12 @@ def preprocess_data(data: List[Dict[str, Any]], max_messages: int = 5) -> List[D
         List of dicts with:
         {
             "conversation_id": str,
-            "conversation_text": str
+            "history": str,
+            "last_message": str
         }
     """
     processed = []
+    max_messages = settings.MAX_HISTORY_TURNS
 
     for convo in data:
         conv_id = convo.get("conversation_id", "unknown_id")
@@ -88,9 +104,9 @@ def preprocess_data(data: List[Dict[str, Any]], max_messages: int = 5) -> List[D
 
 
 def output_writer(predictions: List[Dict[str, str]]) -> None:
-    """Format the classification result for API response."""
+    """Write classification results to JSON and CSV files."""
 
-    output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "output")
+    output_dir = os.path.join(os.getcwd(), "Output")
     os.makedirs(output_dir, exist_ok=True)
 
     json_path = os.path.join(output_dir, "classification_results.json")

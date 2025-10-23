@@ -1,5 +1,6 @@
 from typing import Dict, Any, List
 import logging
+from app.core import rationale
 from app.core.model import classifier
 from app.core.prompt_builder import build_zero_shot_prompt
 from app.core.rationale import generate_rationale
@@ -30,15 +31,14 @@ class ClassifierService:
             results = []
             for convo in cleaned_data:
                 result = classifier.classify(convo)
-                results.append(result)
 
             # Generate rationale if enabled
-            '''rationale = generate_rationale(
-                intent=intent,
-                confidence=confidence,
-                message=cleaned_message,
-                history=cleaned_history
-            ) if settings.ENABLE_RATIONALE else None'''
+                result['rationale'] = generate_rationale(
+                    conversation_text=convo.get("history", "") + convo.get("last_message", ""),
+                    predicted_intent=result.get("predicted_intent", "")
+                )
+
+                results.append(result)
             
             # Format result
             output_writer(results)

@@ -1,41 +1,41 @@
-from typing import Dict, List, Any
-from app.config import settings
-
-def generate_rationale(
-    intent: str,
-    confidence: float,
-    message: str,
-    history: List[Dict[str, Any]]
-) -> str:
-    """Generate a human-readable rationale for the intent classification."""
-    if not settings.ENABLE_RATIONALE:
-        return ""
-        
-    # Start with base explanation
-    rationale = [
-        f"Intent '{intent}' was detected",
-        f"Confidence: {confidence:.2%}"
-    ]
+from app.config import settings  
     
-    # Add context-specific reasoning
-    if confidence >= settings.CONFIDENCE_THRESHOLD:
-        rationale.append("This classification is based on:")
+def generate_rationale(conversation_text, predicted_intent):
+        """Extract keywords and relevant quote
+        Note: Intent keywords should be defined in settings.py as a dictionary mapping intents to lists of keywords."""
+
         
-        # Add message-specific reasoning
-        if "question" in intent.lower() and "?" in message:
-            rationale.append("- The message ends with a question mark")
-        elif "greeting" in intent.lower() and any(word in message.lower() for word in ["hi", "hello", "hey"]):
-            rationale.append("- The message contains common greeting words")
-        elif "farewell" in intent.lower() and any(word in message.lower() for word in ["bye", "goodbye", "see you"]):
-            rationale.append("- The message contains common farewell expressions")
-            
-        # Add context from conversation history if available
-        if history:
-            recent_context = history[-settings.MAX_HISTORY_TURNS:]
-            if len(recent_context) > 0:
-                rationale.append("- Conversation context was considered")
-                
-    else:
-        rationale.append("Note: Classification confidence is below the threshold")
+        intent_keywords = settings.INTENT_KEYWORDS
         
-    return "\n".join(rationale)
+        # Find matching keywords
+        matched_keywords = [
+            kw for kw in intent_keywords[predicted_intent]
+            if kw in conversation_text
+        ]
+        
+        # Extract most relevant user message
+        user_messages = [
+            msg.strip() for msg in conversation_text.split('|')
+            if 'user:' in msg.lower()
+        ]
+        
+        # Find message with most keyword matches
+        best_message = None
+        max_matches = 0
+        for msg in user_messages:
+            matches = sum(1 for kw in matched_keywords if kw in msg.lower())
+            if matches > max_matches:
+                max_matches = matches
+                best_message = msg.replace('user:', '').replace('User:', '').strip()
+        
+        # Truncate long messages
+        if best_message and len(best_message) > 80:
+            best_message = best_message[:77] + "..."
+        
+        # Generate rationale
+        if matched_keywords and best_message:
+            return f"The user mentioned '{matched_keywords[0]}' in: \"{best_message}\""
+        elif matched_keywords:
+            return f"Keywords detected: '{', '.join(matched_keywords[:2])}' indicating {predicted_intent}"
+        else:
+            return f"Conversation pattern and context indicate {predicted_intent}"

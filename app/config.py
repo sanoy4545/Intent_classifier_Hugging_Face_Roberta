@@ -3,9 +3,7 @@ from typing import List, Optional
 
 class Settings(BaseSettings):
     # Model configuration (Gemma, DistilBERT, RoBERTa, etc.)
-    MODEL_NAME: str = "distilbert-base-uncased-finetuned-sst-2-english"  # or any open-source model you choose
-    MODEL_PATH: Optional[str] = None  # Path to local model directory if downloaded
-
+    MODELS: List[str] = ["roberta-large-mnli","microsoft/deberta-base"]  # or any open-source model you choose
     # Allowed final intents for classification
     ALLOWED_INTENTS: List[str] = [
         "Book Appointment",
@@ -14,6 +12,13 @@ class Settings(BaseSettings):
         "Support Request",
         "Follow-Up"
     ]
+    INTENT_KEYWORDS: dict = {
+        "Book Appointment": ["schedule", "appointment", "visit", "viewing", "tour", "meet", "book", "come see"],
+        "Product Inquiry": ["looking for", "need", "bhk", "property", "details", "specifications", "tell me about"],
+        "Pricing Negotiation": ["budget", "price", "cost", "negotiate", "discount", "max", "afford", "deal"],
+        "Support Request": ["issue", "problem", "help", "support", "not working", "error", "fix", "urgent"],
+        "Follow-Up": ["following up", "update", "status", "waiting", "checking in", "any news", "previously"]
+    }
 
     # Classification parameters
     MAX_HISTORY_TURNS: int = 5
