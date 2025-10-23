@@ -41,9 +41,10 @@ class ClassifierService:
                 results.append(result)
             
             # Format result
-            output_writer(results)
+            output=output_writer(results)
 
             logger.info(f"Successfully classified message with intent")
+            return output
 
         except Exception as e:
             logger.error(f"Error in classification service: {str(e)}")

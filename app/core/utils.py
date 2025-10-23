@@ -1,4 +1,5 @@
 import csv,os,json,re,emoji
+import zipfile
 import logging
 from app.config import settings
 from typing import Dict, Any, List
@@ -111,6 +112,7 @@ def output_writer(predictions: List[Dict[str, str]]) -> None:
 
     json_path = os.path.join(output_dir, "classification_results.json")
     csv_path = os.path.join(output_dir, "classification_results.csv")
+    zip_path = os.path.join(output_dir, "classification_results.zip")
 
     # --- Write JSON ---
     with open(json_path, "w", encoding="utf-8") as f_json:
@@ -125,6 +127,13 @@ def output_writer(predictions: List[Dict[str, str]]) -> None:
             for row in predictions:
                 # Ensure only the desired keys are written
                 writer.writerow({key: row.get(key, "") for key in fieldnames})
+    
+    with zipfile.ZipFile(zip_path, "w") as zipf:
+        zipf.write(json_path, "predictions.json")
+        zipf.write(csv_path, "predictions.csv")
+    
+    return zip_path
+
 
 def save_to_jsonl(data: Dict[str, Any], filepath: str) -> None:
     """Save classification result to JSONL file for logging."""

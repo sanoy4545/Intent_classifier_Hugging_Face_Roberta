@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 import json
 
+from fastapi.responses import FileResponse
+
 from app.core.model import classifier
 from app.core.utils import setup_logging
 from app.services.classifier_service import ClassifierService
@@ -62,8 +64,8 @@ async def classify_intent(file: UploadFile = File(...)):
             raise HTTPException(status_code=400, detail="Invalid JSON format")
 
         # Delegate all logic to the service layer
-        result = classifier_service.classify(data)
-        return result
+        result_path = classifier_service.classify(data)
+        return FileResponse(result_path, media_type='application/zip', filename='classification_results.zip')
 
     except HTTPException:
         raise

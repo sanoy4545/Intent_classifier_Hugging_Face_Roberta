@@ -9,24 +9,64 @@ A FastAPI-based service that performs zero-shot intent classification for multi-
 - Detailed classification rationale generation
 - RESTful API with FastAPI
 - Containerized deployment support
-- Comprehensive test suite
 
-## Installation
+## Setup Instrcutions
 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
 cd multi_turn_intent_classifier
 ```
+2. Create Virtual Environment:
+```bash
+python -m venv venv
+venv\Scripts\activate      # On Windows  
+source venv/bin/activate   # On Linux/Mac
 
-2. Install dependencies:
+```
+
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Usage
 
-### Running Locally
+## Using Scripts
+Place your input JSON file inside the input/ folder.
+Example file:
+    [
+  {
+    "conversation_id": "conv_001",
+    "history": "Hi, I ordered a phone last week but it hasn’t arrived yet.",
+    "last_message": "Can you check the status of my order?"
+  },
+  {
+    "conversation_id": "conv_002",
+    "history": "I tried logging in but it failed.",
+    "last_message": "I think I forgot my password."
+  }
+]
+
+'''bash
+python -m app.main_script input/convo.json
+'''
+Logging enabled by default.
+Creates /logs/ folder with a timestamped log file.
+
+'''bash
+python -m app.main_script input/convo.json --no_log
+'''
+Logging disabled
+
+Outputs saved to:
+
+    outputs/predictions.json
+
+    outputs/predictions.csv
+
+
+### FastAPI 
 
 1. Start the FastAPI server:
 ```bash
@@ -50,21 +90,22 @@ docker run -p 8000:8000 intent-classifier
 ## API Endpoints
 
 - `POST /classify`: Classify the intent of a message with conversation context
-- `GET /intents`: List all available intent categories
-- `GET /health`: Check service health status
 
 ### Example Request
 
 ```json
+[{
+  "conversation_id": "conv_001",
+  "history": "Hi, I ordered a phone last week but it hasn’t arrived yet.",
+  "last_message": "Can you check the status of my order?"
+},
 {
-    "message": "What time is it?",
-    "history": [
-        {
-            "user": "Hello",
-            "assistant": "Hi there! How can I help you?"
-        }
-    ]
+  "conversation_id": "conv_002",
+  "history": "Hi, I ordered a phone last week but it hasn’t arrived yet.",
+  "last_message": "Can you check the status of my order?"
 }
+]
+
 ```
 
 ### Example Response

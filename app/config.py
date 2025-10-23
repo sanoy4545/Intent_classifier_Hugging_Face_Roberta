@@ -22,8 +22,6 @@ class Settings(BaseSettings):
 
     # Classification parameters
     MAX_HISTORY_TURNS: int = 5
-    CONFIDENCE_THRESHOLD: float = 0.7
-    ENABLE_RATIONALE: bool = True
 
     class Config:
         env_file = ".env"
