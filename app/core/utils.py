@@ -28,7 +28,6 @@ def setup_logging(enable_logging: bool = True):
             logging.StreamHandler()
         ]
     )
-    logging.info(f"Logging initialized. Logs are being saved to: {log_file}")
 
 def clean_text(text: str) -> str:
     """
@@ -134,52 +133,7 @@ def output_writer(predictions: List[Dict[str, str]]) -> None:
     
     return zip_path
 
-
-def save_to_jsonl(data: Dict[str, Any], filepath: str) -> None:
-    """Save classification result to JSONL file for logging."""
-    try:
-        with open(filepath, 'a') as f:
-            f.write(json.dumps(data) + '\n')
-    except Exception as e:
-        logging.error(f"Error saving to JSONL: {str(e)}")
-
 # Initialize logging when module is imported
 setup_logging()
 
 
-
-'''sample_conversations = [
-    {
-        "conversation_id": "conv_001",
-        "messages": [
-            {"sender": "user", "text": "Hi, I'm looking for a 2BHK in Dubai 🏙️"},
-            {"sender": "agent", "text": "Great! Any specific area in mind?"},
-            {"sender": "user", "text": "Preferably Marina or JVC"},
-            {"sender": "agent", "text": "What's your budget?"},
-            {"sender": "user", "text": "Max 120k. Can we do a site visit this week?"}
-        ]
-    },
-    {
-        "conversation_id": "conv_002",
-        "messages": [
-            {"sender": "user", "text": "Hello, I need help booking a flight ✈️"},
-            {"sender": "agent", "text": "Sure! Where are you flying from and to?"},
-            {"sender": "user", "text": "From New York to London, next Monday"},
-            {"sender": "agent", "text": "Got it. Economy or business class?"},
-            {"sender": "user", "text": "Economy, please!"}
-        ]
-    },
-    {
-        "conversation_id": "conv_003",
-        "messages": [
-            {"sender": "user", "text": "Hey, can you recommend a good Italian restaurant? 🍝"},
-            {"sender": "agent", "text": "Sure! Do you prefer downtown or near the park?"},
-            {"sender": "user", "text": "Near the park is fine."}
-        ]
-    }
-]
-
-processed = preprocess_data(sample_conversations, max_messages=5)
-
-for convo in processed:
-    print(convo)'''

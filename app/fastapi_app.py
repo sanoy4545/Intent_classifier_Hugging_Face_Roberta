@@ -64,7 +64,7 @@ async def classify_intent(file: UploadFile = File(...)):
             raise HTTPException(status_code=400, detail="Invalid JSON format")
 
         # Delegate all logic to the service layer
-        result_path = classifier_service.classify(data)
+        result_path = classifier_service.classify_conversations(data)
         return FileResponse(result_path, media_type='application/zip', filename='classification_results.zip')
 
     except HTTPException:

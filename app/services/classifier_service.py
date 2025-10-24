@@ -13,26 +13,20 @@ class ClassifierService:
     def classify_conversations(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Orchestrate the classification process:
-        1. Preprocess the message
-        2. Validate and clean history
-        3. Build the classification prompt
-        4. Run inference
-        5. Generate rationale
-        6. Format and return result
+        Args:
+            data: List of conversations to classify
         """
         try:
             # Preprocess message
             cleaned_data = preprocess_data(data)
-            
-            # Build prompt with context
-            #prompt = build_zero_shot_prompt(cleaned_data)
+            logger.info(f"Preprocessed {len(cleaned_data)} conversations for classification")
 
             # Run classification
             results = []
             for convo in cleaned_data:
                 result = classifier.classify(convo)
 
-            # Generate rationale if enabled
+                # Generate rationale 
                 result['rationale'] = generate_rationale(
                     conversation_text=convo.get("history", "") + convo.get("last_message", ""),
                     predicted_intent=result.get("predicted_intent", "")
@@ -44,6 +38,8 @@ class ClassifierService:
             output=output_writer(results)
 
             logger.info(f"Successfully classified message with intent")
+
+            #return zip file path 
             return output
 
         except Exception as e:
