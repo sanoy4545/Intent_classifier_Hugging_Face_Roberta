@@ -55,15 +55,15 @@ Example file:
 
 ```
 
-'''bash
+```bash
 python -m app.main_script input/file_name.json
-'''
+```
 Logging enabled by default.
 Creates /logs/ folder with a timestamped log file.
 
-'''bash
+```bash
 python -m app.main_script input/file_name.json --no_log
-'''
+```
 Logging disabled
 
 Outputs saved to:
@@ -106,7 +106,7 @@ uvicorn app.fastapi_app:app --reload
 streamlit run frontend/client.py
 ```
 
-2. Access the API documentation at http://localhost:8000/docs
+3. Access the API documentation at http://localhost:8000/docs
 
 ### Using Docker (Not Recommended due to large size)
 
