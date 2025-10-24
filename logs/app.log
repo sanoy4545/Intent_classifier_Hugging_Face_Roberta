@@ -1,5 +1,6 @@
-2025-10-24 10:18:14,664 - app.core.model - INFO - Model loaded successfully from roberta-large-mnli 
-2025-10-24 10:18:18,597 - app.core.model - INFO - Model loaded successfully from microsoft/deberta-base 
-2025-10-24 10:18:18,598 - app.fastapi_app - INFO - Model loaded successfully
-2025-10-24 10:18:31,763 - app.services.classifier_service - INFO - Preprocessed 3 conversations for classification
-2025-10-24 10:19:05,805 - app.services.classifier_service - INFO - Successfully classified message with intent
+2025-10-24 11:16:58,032 - __main__ - INFO - Loaded 2 conversations from input/convo.json
+2025-10-24 11:17:01,457 - app.core.model - INFO - Model loaded successfully from roberta-large-mnli 
+2025-10-24 11:17:04,598 - app.core.model - INFO - Model loaded successfully from microsoft/deberta-base 
+2025-10-24 11:17:04,598 - __main__ - INFO - Model loaded successfully
+2025-10-24 11:17:04,619 - app.services.classifier_service - INFO - Preprocessed 2 conversations for classification
+2025-10-24 11:17:29,242 - app.services.classifier_service - INFO - Successfully classified message with intent

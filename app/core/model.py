@@ -67,7 +67,7 @@ class IntentClassifier:
                     best_score = confidence
                     best_intent = intent
 
-        return best_intent, best_score
+        return best_intent
 
     def classify(
     self,
@@ -93,14 +93,13 @@ class IntentClassifier:
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        best_intent,best_score = self.prediction_logic(intents,history_text,last_msg_text,device)
+        best_intent = self.prediction_logic(intents,history_text,last_msg_text,device)
 
         
 
         return {
             "conversation_id": conversation_id,
             "predicted_intent": best_intent,
-            "confidence": best_score,          #change before submitting
         }
 
 

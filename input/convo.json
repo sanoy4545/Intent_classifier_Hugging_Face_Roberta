@@ -12,17 +12,11 @@
   {
     "conversation_id": "conv_002",
     "messages": [
-      {"sender": "user", "text": "Hello, I need help with my laptop."},
-      {"sender": "agent", "text": "Sure! Can you describe the issue?"},
-      {"sender": "user", "text": "It won't start and shows a blue screen."}
-    ]
-  },
-  {
-    "conversation_id": "conv_003",
-    "messages": [
-      {"sender": "user", "text": "Hey, can you recommend a good Italian restaurant?"},
-      {"sender": "agent", "text": "Sure! Do you prefer downtown or near the park?"},
-      {"sender": "user", "text": "Near the park is fine."}
+      {"sender": "user", "text": "Hello, I have an issue with my recent order"},
+      {"sender": "agent", "text": "Sorry to hear that! Can you describe the problem?"},
+      {"sender": "user", "text": "The item arrived damaged"},
+      {"sender": "agent", "text": "We can replace it or issue a refund. Which do you prefer?"},
+      {"sender": "user", "text": "I would like a replacement, please."}
     ]
   }
 ]

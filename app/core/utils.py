@@ -51,37 +51,28 @@ def truncate_messages(messages: List[Dict[str, Any]], max_messages: int = 5) -> 
     return messages[-max_messages:]
 
 
-def format_conversation(messages: List[Dict[str, Any]]) -> str:
+def format_conversation(messages: List[Dict[str, Any]]) -> Any:
     """
-    Concatenate conversation messages into a single string:
-    'User: ...\nAgent: ...'
+    Concatenate messages into a Python-style parenthesis string for history
+    and return last message separately.
     """
-    lines = []
+    cleaned_texts = []
     for msg in messages:
         sender = msg.get("sender", "").lower()
         text = clean_text(msg.get("text", ""))
-        lines.append(f"{sender}: {text}")
-    return "\n".join(lines[:-1]),lines[-1]  # Return full conversation text
+        cleaned_texts.append(f"{sender}: {text}")
+
+    if len(cleaned_texts) == 1:
+        return "", cleaned_texts[0]
+
+    # All except last message, concatenated with spaces
+    history = " ".join(f'{m}' for m in cleaned_texts[:-1]) 
+    last_message = cleaned_texts[-1]
+    return history, last_message
 
 
-def preprocess_data(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    Preprocess the entire dataset of conversations.
-    
-    Args:
-        data: List of conversations (each conversation is a dict with 'conversation_id' and 'messages')
-        max_messages: Number of most recent messages to keep per conversation
-
-    Returns:
-        List of dicts with:
-        {
-            "conversation_id": str,
-            "history": str,
-            "last_message": str
-        }
-    """
+def preprocess_data(data: List[Dict[str, Any]], max_messages: int = 5) -> List[Dict[str, Any]]:
     processed = []
-    max_messages = settings.MAX_HISTORY_TURNS
 
     for convo in data:
         conv_id = convo.get("conversation_id", "unknown_id")
@@ -90,9 +81,8 @@ def preprocess_data(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not messages:
             continue
 
-        # Process only last N messages
         truncated = truncate_messages(messages, max_messages)
-        history,last_message = format_conversation(truncated)
+        history, last_message = format_conversation(truncated)
 
         processed.append({
             "conversation_id": conv_id,
@@ -106,7 +96,7 @@ def preprocess_data(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 def output_writer(predictions: List[Dict[str, str]]) -> None:
     """Write classification results to JSON and CSV files."""
 
-    output_dir = os.path.join(os.getcwd(), "Output")
+    output_dir = os.path.join(os.getcwd(), "output")
     os.makedirs(output_dir, exist_ok=True)
 
     json_path = os.path.join(output_dir, "classification_results.json")
