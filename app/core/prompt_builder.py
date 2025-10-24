@@ -10,6 +10,5 @@ def build_zero_shot_prompt(history_text: str, last_msg_text: str, intent: str) -
     f"Question: Does the overall conversation, indicate the user's intent is '{intent}'?"
     )
 
-
     return prompt
 

@@ -107,29 +107,3 @@ class IntentClassifier:
 
 # Global instance
 classifier = IntentClassifier()
-'''classifier.load_model()
-print(len(classifier.model))
-sample_input = {
-    "conversation_id": "conv_001",
-    "history": (
-        "user: Hi, I'm looking for a 2BHK in Dubai "
-        "agent: Great! Any specific area in mind? "
-        "user: Preferably Marina or JVC "
-        "agent: What's your budget?"
-    ),
-    "last_message": "user: Max 120k. Can we do a site visit this week?"
-}
-sample_input_2 = {
-    "conversation_id": "conv_002",
-    "history": (
-        "user: Hello, I have an issue with my recent order "
-        "agent: Sorry to hear that! Can you describe the problem? "
-        "user: The item arrived damaged "
-        "agent: We can replace it or issue a refund. Which do you prefer?"
-    ),
-    "last_message": "user: I would like a replacement, please."
-}
-
-
-print(classifier.classify(sample_input))  # Example usage
-print(classifier.classify(sample_input_2))  # Example usage'''
