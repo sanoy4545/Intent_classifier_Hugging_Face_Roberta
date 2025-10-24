@@ -55,17 +55,18 @@ Example file:
 
 ```
 
+Logging enabled by default.Creates /logs/ folder with a timestamped log file.
+
 ```bash
 python -m app.main_script input/file_name.json
 ```
-Logging enabled by default.
-Creates /logs/ folder with a timestamped log file.
+
+
+Logging disabled
 
 ```bash
 python -m app.main_script input/file_name.json --no_log
 ```
-Logging disabled
-
 Outputs saved to:
 
     outputs/predictions.json
