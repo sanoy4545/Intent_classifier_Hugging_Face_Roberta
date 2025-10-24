@@ -56,13 +56,13 @@ Example file:
 ```
 
 '''bash
-python -m app.main_script input/convo.json
+python -m app.main_script input/file_name.json
 '''
 Logging enabled by default.
 Creates /logs/ folder with a timestamped log file.
 
 '''bash
-python -m app.main_script input/convo.json --no_log
+python -m app.main_script input/file_name.json --no_log
 '''
 Logging disabled
 
